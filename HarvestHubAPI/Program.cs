@@ -23,6 +23,22 @@ builder.Services.AddAuthentication(options =>
     })
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                // Log kesalahan autentikasi
+                Console.WriteLine("Authentication failed: " + context.Exception.Message);
+                context.Response.Headers.Add("Token-Invalid", "true");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                // Log validasi token berhasil
+                Console.WriteLine("Token valid");
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -46,6 +62,15 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Menambahkan konfigurasi CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 
 
@@ -76,7 +101,7 @@ else
     app.UseHsts();
 }
 
-
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

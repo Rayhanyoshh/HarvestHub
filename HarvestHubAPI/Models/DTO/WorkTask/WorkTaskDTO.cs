@@ -12,5 +12,8 @@ public class WorkTaskDTO
     public bool IsCompleted { get; set; }
     public bool IsStarted { get; set; }
     public bool IsCancelled { get; set; }
+    public string Instruction { get; set; }
+    public string WorkTaskName { get; set; }
+    public string Attachment { get; set; }
     // Tambahkan properti lain jika diperlukan
 }

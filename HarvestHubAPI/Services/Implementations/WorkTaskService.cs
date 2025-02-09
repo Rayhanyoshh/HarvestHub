@@ -119,6 +119,7 @@ public class WorkTaskService : IWorkTaskService
         {
             var task = await _unitOfWork.WorkTasks.GetById(id);
             task.IsStarted = false;
+            task.WorkTaskStatusCode = "Paused";
             // Lakukan perubahan status lainnya
 
             _unitOfWork.WorkTasks.Update(task);
@@ -137,6 +138,7 @@ public class WorkTaskService : IWorkTaskService
         {
             var task = await _unitOfWork.WorkTasks.GetById(id);
             task.IsCancelled = true;
+            task.WorkTaskStatusCode = "Canceled";
             task.CanceledDate = DateTimeOffset.UtcNow;
             // Lakukan perubahan status lainnya
 
@@ -156,6 +158,7 @@ public class WorkTaskService : IWorkTaskService
         {
             var task = await _unitOfWork.WorkTasks.GetById(id);
             task.IsCompleted = true;
+            task.WorkTaskStatusCode = "Completed";
             // Lakukan perubahan status lainnya
 
             _unitOfWork.WorkTasks.Update(task);
