@@ -27,6 +27,17 @@ The agricultural sector is evolving, and there is a growing need for efficient t
 - **HTTP Client**: Axios
 - **UI Components**: Vue component library
 
+##  Unit Testing & API Testing
+- **Unit Testing** dilakukan dengan NUnit/XUnit.
+- **API Testing** menggunakan:
+  - **Postman Collection**: Untuk mengelola dan menjalankan request API secara otomatis.
+  - **Swagger UI**: Untuk mendokumentasikan dan menguji endpoint API langsung di browser.
+
+##  Security & Authentication Details
+- **Autentikasi** menggunakan **JWT Token**.
+- **Refresh Token** disediakan untuk memperpanjang sesi pengguna tanpa perlu login ulang.
+- Token disimpan dengan aman dan memiliki masa berlaku yang telah ditentukan.
+
 ## Project Structure
 
 
@@ -74,9 +85,21 @@ The agricultural sector is evolving, and there is a growing need for efficient t
 
 ## Environment Setup
 
-- **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/harvesthub.git
+### 1️⃣ Clone Repository
+Pastikan Git telah terinstall di sistem Anda. Jalankan perintah berikut untuk meng-clone repository ini:  
+```sh
+git clone https://github.com/rayhanyoshh/harvesthub.git
+cd harvesthub
+```
+
+### 2️⃣ Buka dengan Rider
+Buka **JetBrains Rider** dan pilih opsi **Open**. Arahkan ke folder proyek yang telah di-clone.
+
+### 3️⃣ Restore Dependensi
+Pulihkan semua dependensi menggunakan perintah berikut:  
+```sh
+dotnet restore
+```
 
 - **Restore the Database**
 
@@ -95,3 +118,283 @@ The agricultural sector is evolving, and there is a growing need for efficient t
     - Specify the database name you want to restore to and configure any additional settings if needed.
 
     - Click OK to start the restore process.
+
+# HarvestHub API Documentation
+
+## Authentication
+
+### Login
+**Endpoint:**  
+`POST http://localhost:5177/api/Auth/login`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+
+**Request Body:**  
+```json
+{
+    "email": "newuser@example.com",
+    "password": "newuserpassword"
+}
+```
+
+---
+
+## Work Tasks
+
+### Create Work Task
+**Endpoint:**  
+`POST http://localhost:5177/api/WorkTasks`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+  "farmFieldId": 12,
+  "workTaskTypeCode": "Cultivate",
+  "dueDate": "2023-12-31T23:59:59Z",
+  "instruction": "Complete cultivation before the end of the year",
+  "WorkTaskName": "Tugas awal",
+  "Attachment": "Tugas.pdf"
+}
+```
+
+---
+
+### Get All Work Tasks
+**Endpoint:**  
+`GET http://localhost:5177/api/WorkTasks`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+---
+
+## Farm Fields
+
+### Create New Farm Field
+**Endpoint:**  
+`POST http://localhost:5177/api/FarmFields`  
+
+**Headers:**  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+  "farmSiteId": 2,
+  "farmFieldName": "South Field",
+  "location": "South Section",
+  "size": 15.5,
+  "farmFieldColorHexCode": "#00FF00",
+  "farmFieldRowDirection": "South-South"
+}
+```
+
+---
+
+### Get All Farm Fields
+**Endpoint:**  
+`GET http://localhost:5177/api/FarmFields`  
+
+---
+
+## Farm Sites
+
+### Create Farm Site
+**Endpoint:**  
+`POST http://localhost:5177/api/FarmSites`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+  "farmSiteName": "West Farm",
+  "defaultPrimaryCropId": 1,
+  "createdUserId": 123
+}
+```
+
+---
+
+### Get All Farm Sites
+**Endpoint:**  
+`GET http://localhost:5177/api/FarmSites`  
+
+---
+
+## Work Task Types
+
+### Create Work Task Type
+**Endpoint:**  
+`POST http://localhost:5177/api/WorkTaskTypes`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+    "workTaskTypeCode": "001",
+    "description": "Cultivate"
+}
+```
+
+---
+
+### Get All Work Task Types
+**Endpoint:**  
+`GET http://localhost:5177/api/WorkTaskTypes`  
+
+---
+
+## Crops
+
+### Create Crop
+**Endpoint:**  
+`POST http://localhost:5177/api/Crops`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+    "cropCode": "WHEAT001"
+}
+```
+
+**Response:**  
+```json
+{
+    "cropId": 1,
+    "cropCode": "WHEAT001",
+    "createdDate": "2024-02-09T12:00:00Z",
+    "createdUserId": 123,
+    "modifiedDate": "2024-02-09T12:00:00Z",
+    "modifiedUserId": 123,
+    "isDeleted": false
+}
+```
+
+---
+
+### Get All Crops
+**Endpoint:**  
+`GET http://localhost:5177/api/Crops`  
+
+**Headers:**  
+- `Authorization: Bearer <your_token>`  
+
+**Response:**  
+```json
+[
+    {
+        "cropId": 1,
+        "cropCode": "WHEAT001",
+        "createdDate": "2024-02-09T12:00:00Z",
+        "createdUserId": 123,
+        "modifiedDate": "2024-02-09T12:00:00Z",
+        "modifiedUserId": 123,
+        "isDeleted": false
+    },
+    {
+        "cropId": 2,
+        "cropCode": "CORN002",
+        "createdDate": "2024-02-10T14:30:00Z",
+        "createdUserId": 124,
+        "modifiedDate": "2024-02-10T14:30:00Z",
+        "modifiedUserId": 124,
+        "isDeleted": false
+    }
+]
+```
+
+---
+
+### Get Crop By ID
+**Endpoint:**  
+`GET http://localhost:5177/api/Crops/{id}`  
+
+**Headers:**  
+- `Authorization: Bearer <your_token>`  
+
+**Response:**  
+```json
+{
+    "cropId": 1,
+    "cropCode": "WHEAT001",
+    "createdDate": "2024-02-09T12:00:00Z",
+    "createdUserId": 123,
+    "modifiedDate": "2024-02-09T12:00:00Z",
+    "modifiedUserId": 123,
+    "isDeleted": false
+}
+```
+
+---
+
+### Update Crop
+**Endpoint:**  
+`PUT http://localhost:5177/api/Crops/{id}`  
+
+**Headers:**  
+- `Content-Type: application/json`  
+- `Authorization: Bearer <your_token>`  
+
+**Request Body:**  
+```json
+{
+    "cropCode": "NEWCROP123",
+    "modifiedUserId": 125,
+    "isDeleted": false
+}
+```
+
+**Response:**  
+```json
+{
+    "cropId": 1,
+    "cropCode": "NEWCROP123",
+    "createdDate": "2024-02-09T12:00:00Z",
+    "createdUserId": 123,
+    "modifiedDate": "2024-02-10T15:00:00Z",
+    "modifiedUserId": 125,
+    "isDeleted": false
+}
+```
+
+---
+
+### Delete Crop (Soft Delete)
+**Endpoint:**  
+`DELETE http://localhost:5177/api/Crops/{id}`  
+
+**Headers:**  
+- `Authorization: Bearer <your_token>`  
+
+**Response:**  
+```json
+{
+    "message": "Crop successfully deleted."
+}
+```
+
+## 🎯 Penutup
+
+Terima kasih telah menggunakan proyek ini! Jika Anda memiliki pertanyaan, saran, atau menemukan masalah, jangan ragu untuk menghubungi atau membuat issue di repository ini.
+
+📌 **Kontribusi:**  
+Kami selalu terbuka untuk kontribusi! Silakan fork repository ini dan ajukan pull request untuk perbaikan atau fitur baru.
+
+📌 **Lisensi:**  
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
